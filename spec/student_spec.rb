@@ -1,4 +1,4 @@
-require_relative '../lib/models/student'
+require 'spec_helper'
 
 describe Student do
   context "database operations" do
