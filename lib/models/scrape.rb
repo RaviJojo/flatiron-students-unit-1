@@ -1,10 +1,3 @@
-require 'nokogiri'
-require 'open-uri'
-require 'pry'
-require 'awesome_print'
-PATH = "http://students.flatironschool.com/students/vinneycavallo.html"
-# take these out when env is set up.
-
 class ItemScraper
   attr_accessor :doc
   # a single student page
@@ -122,7 +115,7 @@ class IndexScraper
 
   def get_student_urls
     url_array =  @doc.css(".big-comment").collect do |link|
-      "http://students.flatironschool.com/#{link.children.children.css('a').attr('href').text}"
+      "#{URL}/#{link.children.children.css('a').attr('href').text}"
     end
     url_array
   end
@@ -133,7 +126,7 @@ class Scrape
   attr_accessor :student_data_array
 
   def initialize
-    url_list = IndexScraper.new("http://students.flatironschool.com/")
+    url_list = IndexScraper.new(URL)
     @array = url_list.get_student_urls 
     @student_data_array = []
   end
@@ -184,8 +177,3 @@ class CreateHash
   #student_hashes = array of hashes (one per student)
 
 end
-
-
-scrape = Scrape.new
-student_hashes = scrape.call
-binding.pry
