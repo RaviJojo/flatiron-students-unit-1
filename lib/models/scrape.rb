@@ -5,16 +5,12 @@ require 'awesome_print'
 PATH = "http://students.flatironschool.com/students/vinneycavallo.html"
 # take these out when env is set up.
 
-class StudentSiteScraper
+class ItemScraper
   attr_accessor :doc
   # a single student page
 
   def initialize(url)
-    @url = url
-  end
-
-  def call
-    @doc = Nokogiri::HTML(open(@url))
+    @doc = Nokogiri::HTML(open(url))
   end
 
   def name
@@ -117,16 +113,101 @@ class StudentSiteScraper
 end
 
 
-class StudentIndexScraper
+class Scrape
+  
+  array = []
 
-  # this will scrape the index and get back urls
-  # should probably also get the excerpts and stuff.
+  this_scrape = IndexScraper.new("http://students.flatironschool.com/")
+
+  this_scrape.get_student_urls.each do |a_url|
+    data = {}
+    a = ItemScraper.new(a_url)
+    data[:name] = a.name
+    data[:twitter] = a.twitter
+    data[:linkedin] = a.linkedin
+    data[:github] = a.github
+    data[:radar] = a.radar
+    data[:quote] = a.quote
+    data[:biography] = a.biography
+    data[:education] = a.education
+    data[:work] = a.work
+    data[:blogs] = a.blogs
+    data[:github_cred] = a.github_cred
+    data[:treehouse_cred] = a.treehouse_cred
+    data[:codeschool_cred] = a.codeschool_cred
+    data[:coderwall_cred] = a.coderwall_cred
+    data[:favorite_website] = a.favorite_website
+    data[:favorite_podcast] = a.favorite_podcast
+    data[:flatiron_projects] = a.flatiron_projects
+    data[:coding_profiles] = a.coding_profiles
+    data[:personal_projects] = a.personal_projects
+    data[:favorite_cities] = a.favorite_cities
+    data[:favorite_comic] = a.favorite_comic
+
+    array << data
+  end
+
+
+
+=begin
+
+  data = {
+    :name => #scraped-name
+    :bio => #scraped-bio
+    #etc.
+  }
+  # call all scrapes for a passed-in student
+
+
+  # return a hash
+  data
+  
+=end
 
 end
 
 
+class IndexScraper
+  attr_accessor :doc
 
-test = StudentSiteScraper.new(PATH)
-test.call
+  def initialize(url)
+    @doc = Nokogiri::HTML(open(url))
+  end
+
+  def get_student_urls
+    url_array =  @doc.css(".big-comment").collect do |link|
+      "http://students.flatironschool.com/#{link.children.children.css('a').attr('href').text}"
+    end
+    url_array
+  end
+
+end
+
+class CreateHash
+
+  # iterate over array of student URLS
+  # create a new StudentSiteScraper instance with each URL
+  # Scrape! the student.
+
+  #student_hashes = array of hashes (one per student)
+
+end
+  
+
+  # create a new StudentSiteScraper instance with a student's url
+  
+
+
+  # eventually get stuff to add to a hash.
+
+  # this will scrape the index and get back urls
+  # should probably also get the excerpts and stuff.
+
+
+
+
+
+test = IndexScraper.new("http://students.flatironschool.com/")
+
 
 binding.pry
