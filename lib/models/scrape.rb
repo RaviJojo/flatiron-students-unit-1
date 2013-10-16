@@ -7,7 +7,7 @@ class StudentSiteScraper
   def initialize(url)
     @url = url
   end
-
+  
   @student_page = Nokogiri::HTML(open(@url))
 
 end
