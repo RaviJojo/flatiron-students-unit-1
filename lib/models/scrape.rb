@@ -80,7 +80,27 @@ class StudentSiteScraper
     @doc.css(".coder-cred")[0].children.children[10].attr('href')
   end
 
+  # John's code going here.
 
+
+
+  def coding_profiles
+    all_links = @doc.css('#ok-text-column-2 .services p')[1].css('a').collect do |link|
+      link.attr('href')
+    end
+  end
+    #=> returns array of site links
+
+  def personal_projects
+    @doc.css('#ok-text-column-4 .services p')[3].content
+  end
+
+  def favorite_cities
+    all_cities = @doc.css('#ok-text-column-2 .services p')[2].css("a").collect do |city|
+      city.text
+    end
+  end
+    #=> returns array of cities
 
 
 end
