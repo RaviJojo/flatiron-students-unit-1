@@ -79,10 +79,25 @@ class StudentSiteScraper
   def coderwall_cred
     @doc.css(".coder-cred")[0].children.children[10].attr('href')
   end
+############################################################
 
+def favorite_website
+  @doc.css("#ok-text-column-3 .services p").children[10].attr('href')
+end
 
+def favorite_comic
+  @doc.css("#ok-text-column-3 .services p").children[13].attr('href')
+end
 
+def favorite_podcast
+  @doc.css("#ok-text-column-3 .services p").children[16].attr('href')
+end
 
+def flatiron_projects
+  @doc.css("#ok-text-column-4 .services p").children[1].text
+end
+
+############################################################
 end
 
 
