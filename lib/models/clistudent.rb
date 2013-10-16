@@ -49,7 +49,7 @@ class CLIStudent
   end
 
   def show
-    print "Enter student id or name: "
+    print "Enter student id or ANY PART of student name: "
     search = gets.chomp.strip.downcase
     if search.to_i.to_s == search     # if user enters ID number
       display(Student.find(search.to_i))
@@ -75,6 +75,8 @@ class CLIStudent
         puts "LinkedIn: #{s.linkedin}"
         puts "GitHub: #{s.github}"
         puts "Blog: #{s.blog}"
+        puts "Education: #{s.education}"
+        puts "Bio: #{s.bio}"
       end
     end
   end

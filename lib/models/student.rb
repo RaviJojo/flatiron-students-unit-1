@@ -5,7 +5,9 @@ class Student
     :twitter => "TEXT",
     :linkedin => "TEXT",
     :github => "TEXT",
-    :blog => "TEXT"
+    :blog => "TEXT",
+    :education => "TEXT",
+    :bio => "TEXT"
   }
 
   def self.attributes_hash
@@ -110,7 +112,12 @@ class Student
   end
 
   def insert
-    @@db.execute(self.class.insert_sql, self.attributes_for_insert)
+    insertsql = self.class.insert_sql
+    insertvals = self.attributes_for_insert
+    insertvals2 = insertvals.collect do |val|
+      val.is_a?(Array) ? val.join(', ') : val
+    end
+    @@db.execute(insertsql, insertvals2)
     get_id
     @saved = true
   end
@@ -165,6 +172,10 @@ class Student
 
   def self.find(id)
     Student.find_by_id(id).first
+  end
+
+  def self.find_by_name(searchname)     # searches any part of name
+    Student.all.select {|student| student.name.downcase.include?(searchname.downcase.strip.squeeze(' '))}
   end
  
   def delete
