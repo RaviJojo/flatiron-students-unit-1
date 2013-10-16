@@ -46,12 +46,25 @@ class StudentSiteScraper
     @doc.css("#ok-text-column-2 .services p").first.content.gsub("\n","")
   end
 
-  def blogs
-    all_blogs = @doc.css("#ok-text-column-3 .services p")[0].css("a").collect do |item|
-      item.attr('href')
+  def education
+    all_education = @doc.css("#ok-text-column-3 .services ul li").collect do |school|
+      school.content
     end
   end
-    #=> this returns an array of blogs
+    #=> returns array of school names
+
+  def work
+    @doc.css("#ok-text-column-4 .services p").children[0].text.gsub("\n","")
+  end
+
+  def blogs
+    all_blogs = @doc.css("#ok-text-column-3 .services p")[0].css("a").collect do |blog|
+      blog.attr('href')
+    end
+  end
+    #=> returns an array of blog links
+
+
 
 
 
@@ -66,6 +79,8 @@ class StudentIndexScraper
   # should probably also get the excerpts and stuff.
 
 end
+
+
 
 test = StudentSiteScraper.new(PATH)
 test.call
