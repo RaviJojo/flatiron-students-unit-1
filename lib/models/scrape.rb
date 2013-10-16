@@ -64,8 +64,21 @@ class StudentSiteScraper
   end
     #=> returns an array of blog links
 
+  def github_cred
+    @doc.css(".coder-cred")[0].children.children[1].attr('href')
+  end
 
+  def treehouse_cred
+    @doc.css(".coder-cred")[0].children.children[4].attr('href')
+  end
 
+  def codeschool_cred
+    @doc.css(".coder-cred")[0].children.children[7].attr('href')
+  end
+
+  def coderwall_cred
+    @doc.css(".coder-cred")[0].children.children[10].attr('href')
+  end
 
 
 
