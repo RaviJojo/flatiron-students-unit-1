@@ -1,0 +1,27 @@
+<html>
+<head>
+    <title><%= artist_object.name %> homepage!!</title>
+</head>
+    <body>
+
+        <h1><%= artist_object.name %></h1>
+
+        <h3><%= artist_object.songs.size %> Song<%= if artist_object.songs.size > 1; 's'; end %></h3>
+        <ul>
+            <% artist_object.songs.each do |song| %>
+            <li><a href="../songs/<%= song.url %>"><%= song.name %></a></li>
+            <% end %>
+        </ul>
+
+        <h3>Genres</h3>
+        <ul>
+            <% artist_object.genres.each do |genre| %>
+            <li><a href="../genres/<%= genre.name %>.html"><%= genre.name %></a></li>
+            <% end %>
+        </ul>
+
+
+    </body>
+
+
+</html>
