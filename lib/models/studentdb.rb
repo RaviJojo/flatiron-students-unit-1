@@ -1,37 +1,4 @@
-class Student
-  ATTRIBUTES = {
-    :id => "INTEGER PRIMARY KEY AUTOINCREMENT",
-    :name => "TEXT",
-    :twitter => "TEXT",
-    :linkedin => "TEXT",
-    :github => "TEXT",
-    :blog => "TEXT"
-  }
-
-  def self.attributes_hash
-    ATTRIBUTES
-  end
-
-  def self.attributes
-    ATTRIBUTES.keys
-  end
-
-  def self.attributes_for_db
-    ATTRIBUTES.keys.reject{|k| k == :id}
-  end
-
-  attr_accessor *attributes_for_db
-
-  attr_reader :id
-
-  def initialize(id = nil)
-    @id = id
-    if id.nil?
-      @id = self.class.count + 1
-    end
-    @saved = !id.nil?
-  end
- 
+class StudentDB
   @@db = SQLite3::Database.new('students.db')
 
   self.attributes.each do |attribute_name|
@@ -78,6 +45,14 @@ class Student
   def self.count
     sql = "SELECT COUNT(*) FROM #{self.table_name};"
     result = @@db.execute(sql).flatten.first
+  end
+
+  def initialize(id = nil)
+    @id = id
+    if id.nil?
+      @id = self.class.count + 1
+    end
+    @saved = !id.nil?
   end
  
   def get_id
@@ -132,7 +107,7 @@ class Student
   def save
     if @saved
       update
-    elsif Student.find_by_name(self.name).size == 0
+    else
       insert
     end
   end
@@ -192,9 +167,6 @@ class Student
         # s.name = "Avi"
       end  
     end
-  end
 
-  def url
-    self.name.gsub(' ','-') + '.html'
   end
 end

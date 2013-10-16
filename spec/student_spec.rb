@@ -1,4 +1,5 @@
-require 'spec_helper'
+require_relative '../environment'
+require_relative './spec_helper'
 
 describe Student do
   context "database operations" do
