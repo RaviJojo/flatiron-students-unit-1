@@ -18,19 +18,19 @@ class ItemScraper
   end
 
   def twitter
-    @doc.css(".social-icons a")[0].attr('href').value
+    @doc.css(".social-icons a")[0].attr('href')
   end
 
   def linkedin
-    @doc.css(".social-icons a")[1].attr('href').value
+    @doc.css(".social-icons a")[1].attr('href')
   end
 
   def github
-    @doc.css(".social-icons a")[2].attr('href').value
+    @doc.css(".social-icons a")[2].attr('href')
   end
 
   def radar
-    @doc.css(".social-icons a")[3].attr('href').value
+    @doc.css(".social-icons a")[3].attr('href')
   end
   # this is the "rss"/facebook link.
 
@@ -113,60 +113,6 @@ class ItemScraper
 end
 
 
-class Scrape
-  
-  array = []
-
-  this_scrape = IndexScraper.new("http://students.flatironschool.com/")
-
-  this_scrape.get_student_urls.each do |a_url|
-    data = {}
-    a = ItemScraper.new(a_url)
-    data[:name] = a.name
-    data[:twitter] = a.twitter
-    data[:linkedin] = a.linkedin
-    data[:github] = a.github
-    data[:radar] = a.radar
-    data[:quote] = a.quote
-    data[:biography] = a.biography
-    data[:education] = a.education
-    data[:work] = a.work
-    data[:blogs] = a.blogs
-    data[:github_cred] = a.github_cred
-    data[:treehouse_cred] = a.treehouse_cred
-    data[:codeschool_cred] = a.codeschool_cred
-    data[:coderwall_cred] = a.coderwall_cred
-    data[:favorite_website] = a.favorite_website
-    data[:favorite_podcast] = a.favorite_podcast
-    data[:flatiron_projects] = a.flatiron_projects
-    data[:coding_profiles] = a.coding_profiles
-    data[:personal_projects] = a.personal_projects
-    data[:favorite_cities] = a.favorite_cities
-    data[:favorite_comic] = a.favorite_comic
-
-    array << data
-  end
-
-
-
-=begin
-
-  data = {
-    :name => #scraped-name
-    :bio => #scraped-bio
-    #etc.
-  }
-  # call all scrapes for a passed-in student
-
-
-  # return a hash
-  data
-  
-=end
-
-end
-
-
 class IndexScraper
   attr_accessor :doc
 
@@ -183,6 +129,52 @@ class IndexScraper
 
 end
 
+class Scrape
+  attr_accessor :student_data_array
+
+  def initialize
+    url_list = IndexScraper.new("http://students.flatironschool.com/")
+    @array = url_list.get_student_urls 
+    @student_data_array = []
+  end
+
+  def call
+  
+    @array.each do |a_url|
+      data = {}
+      begin
+      a = ItemScraper.new(a_url)
+      data[:name] = a.name
+      data[:twitter] = a.twitter
+      data[:linkedin] = a.linkedin
+      data[:github] = a.github
+      data[:radar] = a.radar
+      data[:quote] = a.quote
+      data[:biography] = a.biography
+      data[:education] = a.education
+      data[:work] = a.work
+      data[:blogs] = a.blogs
+      data[:github_cred] = a.github_cred
+      data[:treehouse_cred] = a.treehouse_cred
+      data[:codeschool_cred] = a.codeschool_cred
+      data[:coderwall_cred] = a.coderwall_cred
+      data[:favorite_website] = a.favorite_website
+      data[:favorite_podcast] = a.favorite_podcast
+      data[:flatiron_projects] = a.flatiron_projects
+      data[:coding_profiles] = a.coding_profiles
+      data[:personal_projects] = a.personal_projects
+      data[:favorite_cities] = a.favorite_cities
+      data[:favorite_comic] = a.favorite_comic
+      rescue
+      end
+
+      @student_data_array << data
+    end
+
+    @student_data_array #return of call
+  end
+end
+
 class CreateHash
 
   # iterate over array of student URLS
@@ -192,22 +184,8 @@ class CreateHash
   #student_hashes = array of hashes (one per student)
 
 end
-  
-
-  # create a new StudentSiteScraper instance with a student's url
-  
 
 
-  # eventually get stuff to add to a hash.
-
-  # this will scrape the index and get back urls
-  # should probably also get the excerpts and stuff.
-
-
-
-
-
-test = IndexScraper.new("http://students.flatironschool.com/")
-
-
+scrape = Scrape.new
+student_hashes = scrape.call
 binding.pry
