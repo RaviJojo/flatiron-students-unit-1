@@ -5,9 +5,23 @@ class Student
     :twitter => "TEXT",
     :linkedin => "TEXT",
     :github => "TEXT",
-    :blog => "TEXT",
+    :blogs => "TEXT",
     :education => "TEXT",
-    :bio => "TEXT"
+    :bio => "TEXT",
+    :radar => "TEXT",
+    :quote => "TEXT",
+    :work => "TEXT",
+    :github_cred => "TEXT",
+    :treehouse_cred => "TEXT",
+    :codeschool_cred => "TEXT",
+    :coderwall_cred => "TEXT",
+    :favorite_website => "TEXT",
+    :favorite_podcast => "TEXT",
+    :flatiron_projects => "TEXT",
+    :coding_profiles => "TEXT",
+    :personal_projects => "TEXT",
+    :favorite_cities => "TEXT",
+    :favorite_comic => "TEXT"
   }
 
   def self.attributes_hash
@@ -206,6 +220,10 @@ class Student
   end
 
   def url
-    self.name.gsub(' ','-') + '.html'
+    self.name.downcase.gsub(/\s|'/,'_') + '.html'
+  end
+
+  def urlpic
+    self.name.downcase.gsub(/\s|'/,'_')
   end
 end

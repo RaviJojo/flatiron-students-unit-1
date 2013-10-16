@@ -120,6 +120,23 @@ class IndexScraper
     url_array
   end
 
+=begin  - Raymond's index page scrape:
+    doc = Nokogiri::HTML(open(self.url))
+    frontpage = doc.css(".home-blog-post")
+
+    photo_urls = frontpage.map do |student|
+      student.css(".prof-image").attr("src").to_s
+    end
+
+    taglines = frontpage.map do |student|
+      student.css(".home-blog-post-meta").text
+    end
+
+    blurbs = frontpage.map do |student|
+      student.css(".excerpt p").text.squeeze(' ')
+    end
+=end
+
 end
 
 class Scrape

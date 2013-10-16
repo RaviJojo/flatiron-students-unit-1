@@ -11,7 +11,7 @@
   <link rel='stylesheet' href="../css/style.css" type='text/css' media='all' />
   <style>
     .top-page-title {
-      background: url(../img/img245.jpg) no-repeat top center;
+      background: url(../img/students/<%= student.urlpic %>_background.jpg) no-repeat top center;
     }
   </style>
   <link rel="apple-touch-icon" href="img/apple-touch-icon.png" />
@@ -75,7 +75,7 @@
       </div>
 
       <div class="link-subs">
-        <span><img class="swiss-knife-icon" src="../img/swiss-army-knife.png">Student Name</span>
+        <span><img class="swiss-knife-icon" src="../img/swiss-army-knife.png"><%= student.name %></span>
         <ul class="smooth-scroller">
           <li><a href="#scroll-about">About</a></li>
           <li>|</li>
@@ -95,7 +95,7 @@
       <!-- Begin Splash Image -->
       <div class="top-page-title"> 
         <div>
-          <img src="../img/alex_chiu_profile_pic.jpg" class="student_pic">
+          <img src=<%= "../img/students/#{student.urlpic}_profile.jpg" %> class="student_pic">
         </div>
       </div>
       <! -- End Splash Image -->
@@ -177,19 +177,19 @@
               <div class="services-wrap section coder-cred" id="equalize">
 
                 <div class="column fourth">
-                  <a href=<%= student.github %> target="_blank"><img src="../img/github.png" alt="GitHub" width="130px"></a>
+                  <a href=<%= student.github_cred %> target="_blank"><img src="../img/github.png" alt="GitHub" width="130px"></a>
                 </div>
 
                 <div class="column fourth">
-                  <a href=<%= student.treehouse %> target="_blank"><img src="../img/treehouse.png" alt="Treehouse" width="130px"></a>
+                  <a href=<%= student.treehouse_cred %> target="_blank"><img src="../img/treehouse.png" alt="Treehouse" width="130px"></a>
                 </div>
 
                 <div class="column fourth">
-                  <a href=<%= student.codeschool %> target="_blank"><img src="../img/codeschool.jpg" alt="Code School" width="130"></a>
+                  <a href=<%= student.codeschool_cred %> target="_blank"><img src="../img/codeschool.jpg" alt="Code School" width="130"></a>
                 </div>
 
                 <div class="column fourth">
-                  <a href=<%= student.coderwall %> target="_blank"><img src="../img/coderwall.png" alt="Coder Wall" width="130"></a>
+                  <a href=<%= student.coderwall_cred %> target="_blank"><img src="../img/coderwall.png" alt="Coder Wall" width="130"></a>
                 </div>
               </div>
               <! -- End Service -->
@@ -212,10 +212,10 @@
                     </div>
                     <div class="clear"></div>
                     <p>
-                      - <a href=<%= student.codeschool %>>Code School</a><br>
-                      - <a href=<%= student.treehouse %>>Treehouse</a><br>
-                      - <a href=<%= student.codecademy %>>Codecademy</a><br>
-                      - <a href=<%= student.coderwall %>>Coder Wall</a><br>
+                      - <a href=<%= student.codeschool_cred %>>Code School</a><br>
+                      - <a href=<%= student.treehouse_cred %>>Treehouse</a><br>
+                      - <a href=<%=  %>>Codecademy</a><br>
+                      - <a href=<%= student.coderwall_cred %>>Coder Wall</a><br>
                     </p>
                   </div>
                 </div>
@@ -227,7 +227,7 @@
                     </div>
                     <div class="clear"></div>
                     <p>
-                      - <a href=<%= student.blog %>>Personal Blog</a><br>
+                      - <a href=<%= student.blogs %>>Personal Blog</a><br>
                       - <a href="#">Tumblr</a><br>
                     </p>
                   </div>
@@ -239,7 +239,7 @@
                       <h3>Personal Projects</h3>
                     </div>
                     <div class="clear"></div>
-                    <p><%= student.personalprojects %></p>
+                    <p><%= student.personal_projects %></p>
                   </div>
                 </div>
             </div>
@@ -261,9 +261,11 @@
                     <div class="clear"></div>
                     <p>
                       <!-- inserted another loop -->
-                      <% students.favcities.each do |city| %>
+                      <% begin %>
+                      <% student.favorite_cities.each do |city| %>
                       <a><%= city %></a><br>
                       <% end %>
+                      <% rescue; end %>
                     </p>
                   </div>
                 </div>
@@ -274,9 +276,9 @@
                   </div>
                   <div class="clear"></div>
                   <p>
-                    - Favorite Website: <a href="#"><%= student.favwebsite %></a><br>
-                    - Favorite Comic: <a href="#"><%= student.favcomic %></a><br>
-                    - Favorite Radio Program: <a href="#"><%= student.favradio %></a><br>
+                    - Favorite Website: <a href="#"><%= student.favorite_website %></a><br>
+                    - Favorite Comic: <a href="#"><%= student.favorite_comic %></a><br>
+                    - Favorite Radio Program: <a href="#"><%= student.favorite_podcast %></a><br>
                   </p>
                 </div>
               </div>
@@ -287,7 +289,7 @@
                     <h3>Flatiron School Projects</h3>
                   </div>
                   <div class="clear"></div>
-                  <p><%= student.flatironprojects %></p>
+                  <p><%= student.flatiron_projects %></p>
                 </div>
               </div>
             </div>
