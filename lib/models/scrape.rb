@@ -1,5 +1,6 @@
 require 'nokogiri'
 require 'open-uri'
+# take these out when env is set up.
 
 class StudentSiteScraper
 
@@ -9,9 +10,8 @@ class StudentSiteScraper
 
   @student_page = Nokogiri::HTML(open(@url))
 
-
-
 end
+
 
 class StudentIndexScraper
 
