@@ -15,7 +15,7 @@ class ItemScraper
   def name
     begin
       return "Rosie Hoyem" if @doc.css(".page-title").children.text.include?("Rosie Hoyem")
-      @doc.css(".ib_main_header").children.text
+      @doc.css(".ib_main_header").children.text.strip
     rescue
       @@apology
     end
@@ -235,7 +235,7 @@ class IndexScraper
     frontpage = self.doc.css(".home-blog-post")
 
     frontpage.each do |student|
-      name = student.css(".big-comment").text.strip
+      name = student.css(".big-comment").text.strip.split("\n").first
       photo_url = student.css(".prof-image").attr("src").to_s
       tagline = student.css(".home-blog-post-meta").text
       blurb = student.css(".excerpt p").text.squeeze(' ')
@@ -303,9 +303,14 @@ class Scrape
       s.blurb = index_hash[s.name][:blurb]
       s.tagline = index_hash[s.name][:tagline]
       rescue
+        binding.pry
         puts "bork bork bork!"
         puts s.name
       end
+      # Bana goes by two names, need to compensate
+      # Chris goes by two names (chris, christopher)
+      # saron = student name
+
       s.save
       
       @students << s
