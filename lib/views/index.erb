@@ -100,12 +100,20 @@
 
               <!-- student loop -->
 
-              <% Student.all.each do |student| %>
+              <% students.each do |student| %>
                <!-- Begin Student -->
               <li class="home-blog-post">
                 <div class="blog-thumb">
                   <a href="students/<%= student.url %>">
-                    <img width="304" height="304" class="prof-image" src="./img/<%= student.name.split(" ").join("_") %>_profile_pic.jpg" class="attachment-blog-thumb wp-post-image" alt="student_name">
+                    <img width="304" height="304" class="prof-image"
+                    <% begin %>
+                    <% if student.face_link.start_with?(".") %>
+                    src="./img/<%=student.face_link%>"
+                     <% else %>
+                     src = "<%= student.face_link %>"
+                     <% end %>
+                     class="attachment-blog-thumb wp-post-image" alt="student_name">
+                     <% rescue; puts "more bork!"; end %>
                   </a>
                 </div>
 

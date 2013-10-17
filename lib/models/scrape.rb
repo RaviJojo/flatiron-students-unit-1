@@ -203,6 +203,15 @@ class ItemScraper
   end
     #=> returns array of cities
 
+  def face_link
+    @doc.css('img.student_pic').attr('src').text
+
+  end
+
+  def bg_link
+    @doc.css('style').text.split('background: url(').last.split(')').first
+  end
+
 end
 
 
@@ -220,31 +229,31 @@ class IndexScraper
     url_array
   end
 
-=begin  - Raymond's index page scrape:
-    doc = Nokogiri::HTML(open(self.url))
-    frontpage = doc.css(".home-blog-post")
+  def build_index_hash
+    hash = {}
+    frontpage = self.doc.css(".home-blog-post")
 
-    photo_urls = frontpage.map do |student|
-      student.css(".prof-image").attr("src").to_s
+    frontpage.each do |student|
+      name = student.css(".big-comment").text.strip
+      photo_url = student.css(".prof-image").attr("src").to_s
+      tagline = student.css(".home-blog-post-meta").text
+      blurb = student.css(".excerpt p").text.squeeze(' ')
+
+      hash[name] = {blurb: blurb, tagline: tagline, index_photo_url: photo_url }
     end
+    hash
 
-    taglines = frontpage.map do |student|
-      student.css(".home-blog-post-meta").text
-    end
 
-    blurbs = frontpage.map do |student|
-      student.css(".excerpt p").text.squeeze(' ')
-    end
-=end
-
+  end
 end
 
+
 class Scrape
-  attr_accessor :students
+  attr_accessor :students, :index_scraper
 
   def initialize
-    url_list = IndexScraper.new(URL)
-    @array = url_list.get_student_urls 
+    @index_scraper = IndexScraper.new(URL)
+    @array = @index_scraper.get_student_urls 
     @students = []
   end
 
@@ -258,12 +267,9 @@ class Scrape
     system("cp _site/img/students/#{data[:pic_names][:bg]} _site/img/students/#{object.name.downcase.gsub(/\s|'/, '_')}_background.jpg")
   end
 
-
-  def call
-  
-    @array.each do |a_url|
-      data = {}
+  def page_scrape(a_url)
       a = ItemScraper.new(a_url)
+      index_hash = @index_scraper.build_index_hash
       s = Student.new
       s.name = a.name
       s.favorite_comic = a.favorite_comic
@@ -286,8 +292,30 @@ class Scrape
       s.coding_profiles = a.coding_profiles
       s.personal_projects = a.personal_projects
       s.favorite_cities = a.favorite_cities
-
+      
+      # pic info
+      begin
+      s.index_face_link = index_hash[s.name][:index_photo_url]
+      s.face_link = a.face_link
+      s.bg_link = a.bg_link
+      # index info
+      s.blurb = index_hash[s.name][:blurb]
+      s.tagline = index_hash[s.name][:tagline]
+      rescue
+        puts "bork bork bork!"
+        puts s.name
+      end
+      s.save
+      
       @students << s
+  end
+
+
+  def call
+
+    index_scrape = IndexScraper.new(URL)
+    @array.each do |a_url|
+      page_scrape(a_url)    
     end
 
     @students #return of call
