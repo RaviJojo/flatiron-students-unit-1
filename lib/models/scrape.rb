@@ -305,12 +305,14 @@ class Scrape
       rescue
         puts "bork bork bork!"
         puts s.name
+        s.index_face_link = "http://laughingsquid.com/wp-content/uploads/Tard2.jpg"
+        s.face_link = "http://laughingsquid.com/wp-content/uploads/Tard2.jpg" 
+        s.blurb = "Meow, meow, meow"
       end
       s.save
       
       @students << s
   end
-
 
   def call
 
