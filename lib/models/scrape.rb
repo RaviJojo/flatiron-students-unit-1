@@ -219,10 +219,14 @@ class IndexScraper
     end
     url_array
   end
+  
+  def build_index_hash
+    hash = {}
+    frontpage = self.doc.css(".home-blog-post")
 
-=begin  - Raymond's index page scrape:
-    doc = Nokogiri::HTML(open(self.url))
-    frontpage = doc.css(".home-blog-post")
+    name = self.doc.map do |student|
+      student.css("big-comment").text.strip
+    end
 
     photo_urls = frontpage.map do |student|
       student.css(".prof-image").attr("src").to_s
@@ -235,16 +239,20 @@ class IndexScraper
     blurbs = frontpage.map do |student|
       student.css(".excerpt p").text.squeeze(' ')
     end
-=end
 
+    hash[:photo_urls] = photo_urls
+    hash[:taglines] = taglines
+    hash[:blurbs] = blurbs
+    hash
+  end
 end
 
 class Scrape
-  attr_accessor :students
+  attr_accessor :students, :index_scraper
 
   def initialize
-    url_list = IndexScraper.new(URL)
-    @array = url_list.get_student_urls 
+    @index_scraper = IndexScraper.new(URL)
+    @array = @index_scraper.get_student_urls 
     @students = []
   end
 
@@ -258,8 +266,12 @@ class Scrape
     system("cp _site/img/students/#{data[:pic_names][:bg]} _site/img/students/#{object.name.downcase.gsub(/\s|'/, '_')}_background.jpg")
   end
 
+
+
+
   def page_scrape(a_url)
       a = ItemScraper.new(a_url)
+
       s = Student.new
       s.name = a.name
       s.favorite_comic = a.favorite_comic
