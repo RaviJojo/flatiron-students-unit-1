@@ -16,7 +16,8 @@ require_relative '../environment'
 
 scrape = Scrape.new
 students = scrape.call
-
+binding.pry
 
 cli = CLIStudent.new(students)
 cli.call
+

@@ -251,10 +251,13 @@ end
 class Scrape
   attr_accessor :students, :index_scraper
 
+  @@students = []
+  @@i = 0
+
   def initialize
     @index_scraper = IndexScraper.new(URL)
     @array = @index_scraper.get_student_urls 
-    @students = []
+    # @students = []
   end
 
   def pic_transform(object, data)
@@ -307,18 +310,22 @@ class Scrape
       end
       s.save
       
-      @students << s
+      @@students << s
   end
 
 
   def call
 
-    index_scrape = IndexScraper.new(URL)
-    @array.each do |a_url|
-      page_scrape(a_url)    
+    if Time.now.nsec - @@i > 108000
+      index_scrape = IndexScraper.new(URL)
+      @array.each do |a_url|
+        page_scrape(a_url)    
+      end
+      @@i = Time.now.nsec
+      @@students #return of call
+    else
+      @@students
     end
-
-    @students #return of call
   end
 end
 
