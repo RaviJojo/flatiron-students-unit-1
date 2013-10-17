@@ -290,6 +290,7 @@ class Scrape
     end
 
     @student_data_array #return of call
+    binding.pry
   end
 end
 
