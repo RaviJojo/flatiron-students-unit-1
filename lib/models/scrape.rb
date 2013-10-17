@@ -279,9 +279,9 @@ class Scrape
       s.github = a.github
       s.radar = a.radar
       s.quote = a.quote
-      s.bio = a.bio
+      s.bio = a.bio.strip.squeeze(' ')
       s.education = a.education
-      s.work = a.work
+      s.work = a.work.strip.squeeze(' ')
       s.blogs = a.blogs
       s.github_cred = a.github_cred
       s.treehouse_cred = a.treehouse_cred
@@ -291,7 +291,7 @@ class Scrape
       s.favorite_podcast = a.favorite_podcast
       s.flatiron_projects = a.flatiron_projects
       s.coding_profiles = a.coding_profiles
-      s.personal_projects = a.personal_projects
+      s.personal_projects = a.personal_projects.strip.squeeze(' ')
       s.favorite_cities = a.favorite_cities
       
       # pic info
