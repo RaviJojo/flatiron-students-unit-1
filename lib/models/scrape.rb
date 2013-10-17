@@ -204,13 +204,13 @@ class ItemScraper
     #=> returns array of cities
 
   def face_link
-    @doc.css
+    @doc.css('img.student_pic').attr('src').text
+
   end
 
   def bg_link
-  
+    @doc.css('style').text.split('background: url(').last.split(')').first
   end
-
 
 end
 
@@ -233,18 +233,20 @@ class IndexScraper
     hash = {}
     frontpage = self.doc.css(".home-blog-post")
 
-    self.doc.each do |student|
-      name = student.css("big-comment").text.strip
-      photo_urls = student.css(".prof-image").attr("src").to_s
+    frontpage.each do |student|
+      name = student.css(".big-comment").text.strip
+      photo_url = student.css(".prof-image").attr("src").to_s
       tagline = student.css(".home-blog-post-meta").text
       blurb = student.css(".excerpt p").text.squeeze(' ')
 
-      hash[name] = {blurb: blurb, tagline: tagline}
+      hash[name] = {blurb: blurb, tagline: tagline, index_photo_url: photo_url }
     end
     hash
 
-    { face: a.doc.css('img.student_pic').attr('src').text.split("/").last, bg: a.doc.css('style').text.split("background: url(").last.split(")").first.split("/").last }
+
   end
+end
+
 
 class Scrape
   attr_accessor :students, :index_scraper
@@ -267,7 +269,7 @@ class Scrape
 
   def page_scrape(a_url)
       a = ItemScraper.new(a_url)
-      index_hash = self.index_scraper.build_index_hash
+      index_hash = @index_scraper.build_index_hash
       s = Student.new
       s.name = a.name
       s.favorite_comic = a.favorite_comic
@@ -292,12 +294,18 @@ class Scrape
       s.favorite_cities = a.favorite_cities
       
       # pic info
-      s.index_face_link = 
+      begin
+      s.index_face_link = index_hash[s.name][:index_photo_url]
       s.face_link = a.face_link
       s.bg_link = a.bg_link
       # index info
       s.blurb = index_hash[s.name][:blurb]
       s.tagline = index_hash[s.name][:tagline]
+      rescue
+        puts "bork bork bork!"
+        puts s.name
+      end
+      s.save
       
       @students << s
   end
