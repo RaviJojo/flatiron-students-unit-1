@@ -154,8 +154,8 @@ class Scrape
     puts data[:pic_names][:face]
     puts data[:pic_names][:bg]
     puts "----------------------"
-    system("cp _site/img/students/#{data[:pic_names][:face]} _site/img/students/#{object.name.downcase.gsub(' ', '_')}_profile.jpg")
-    system("cp _site/img/students/#{data[:pic_names][:bg]} _site/img/students/#{object.name.downcase.gsub(' ', '_')}_background.jpg")
+    system("cp _site/img/students/#{data[:pic_names][:face]} _site/img/students/#{object.name.downcase.gsub(/\s|'/, '_')}_profile.jpg")
+    system("cp _site/img/students/#{data[:pic_names][:bg]} _site/img/students/#{object.name.downcase.gsub(/\s|'/, '_')}_background.jpg")
   end
 
 
