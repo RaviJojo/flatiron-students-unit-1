@@ -15,13 +15,11 @@ class Student
     :treehouse_cred => "TEXT",
     :codeschool_cred => "TEXT",
     :coderwall_cred => "TEXT",
-    :favorite_website => "TEXT",
-    :favorite_podcast => "TEXT",
+    :favorite_cities => "TEXT",
     :flatiron_projects => "TEXT",
     :coding_profiles => "TEXT",
     :personal_projects => "TEXT",
-    :favorite_cities => "TEXT",
-    :favorite_comic => "TEXT"
+    :favorites => "TEXT"
   }
 
   def self.attributes_hash

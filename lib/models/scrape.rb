@@ -63,7 +63,7 @@ class ItemScraper
 
   def biography
     begin
-    @doc.css("#ok-text-column-2 .services p").first.content.gsub("\n","")
+      @doc.css(".services-title")[0].parent.to_html
     rescue
       @@apology
     end
@@ -71,10 +71,7 @@ class ItemScraper
 
   def education
     begin
-    all_education = @doc.css("#ok-text-column-3 .services ul li").collect do |
-        school|
-      school.content
-    end
+      @doc.css(".services-title")[1].parent.to_html
     rescue
       @@apology
     end
@@ -82,9 +79,8 @@ class ItemScraper
     #=> returns array of school names
 
   def work
-    # getting truncated/comibing with flatiron projects
     begin
-    @doc.css("#ok-text-column-4 .services p").children[0].text.gsub("\n","")
+      @doc.css(".services-title")[2].parent.to_html
     rescue
       @@apology
     end
@@ -92,10 +88,7 @@ class ItemScraper
 
   def blogs
     begin
-    all_blogs = @doc.css("#ok-text-column-3 .services p")[0].css("a").collect do |
-        blog|
-      blog.attr('href')
-    end
+      @doc.css(".services-title")[4].parent.to_html
     rescue
       @@apology
     end
@@ -134,28 +127,9 @@ class ItemScraper
     end
   end
 
-  def favorite_website
-    # out of order? top getting popped off?
+  def favorites
     begin
-    @doc.css("#ok-text-column-3 .services p").children[10].attr('href')
-    rescue
-      @@apology
-    end
-  end
-
-  def favorite_comic
-    # out of order? top getting popped off?
-    begin
-    @doc.css("#ok-text-column-3 .services p").children[13].attr('href')
-    rescue
-      @@apology
-    end
-  end
-
-  def favorite_podcast
-    # out of order? top getting popped off?
-    begin
-    @doc.css("#ok-text-column-3 .services p").children[16].attr('href')
+      @doc.css(".services-title")[7].parent.to_html
     rescue
       @@apology
     end
@@ -164,7 +138,7 @@ class ItemScraper
   def flatiron_projects
     # combining with Work
     begin
-    @doc.css("#ok-text-column-4 .services p").children[1].text
+      @doc.css(".services-title")[8].parent.to_html
     rescue
       @@apology
     end
@@ -172,10 +146,7 @@ class ItemScraper
 
   def coding_profiles
     begin
-    all_links = @doc.css('#ok-text-column-2 .services p')[1].css('a').collect do |
-        link|
-      link.attr('href')
-    end
+      @doc.css(".services-title")[3].parent.to_html
     rescue
       @@apology
     end
@@ -183,25 +154,22 @@ class ItemScraper
     #=> returns array of site links
 
   def personal_projects
-    # blank
     begin
-    @doc.css('#ok-text-column-4 .services p')[3].content
+      @doc.css(".services-title")[5].parent.to_html
     rescue
       @@apology
     end
   end
 
   def favorite_cities
-    # blank
     begin
-    all_cities = @doc.css('#ok-text-column-2 .services p')[2].css("a").collect do |city|
-      city.text
-    end
+      @doc.css(".services-title")[6].parent.to_html
     rescue
       @@apology
     end
   end
     #=> returns array of cities
+
 
 end
 
@@ -266,26 +234,24 @@ class Scrape
       a = ItemScraper.new(a_url)
       data[:pic_names] = { face: a.doc.css('img.student_pic').attr('src').text.split("/").last, bg: a.doc.css('style').text.split("background: url(").last.split(")").first.split("/").last } 
       data[:name] = a.name
-      data[:favorite_comic] = a.favorite_comic
       data[:twitter] = a.twitter
       data[:linkedin] = a.linkedin
       data[:github] = a.github
       data[:radar] = a.radar
       data[:quote] = a.quote
-      data[:biography] = a.biography
-      data[:education] = a.education
-      data[:work] = a.work
-      data[:blogs] = a.blogs
+      data[:biography_html] = a.biography
+      data[:education_html] = a.education
+      data[:work_html] = a.work
+      data[:blogs_html] = a.blogs
       data[:github_cred] = a.github_cred
       data[:treehouse_cred] = a.treehouse_cred
       data[:codeschool_cred] = a.codeschool_cred
       data[:coderwall_cred] = a.coderwall_cred
-      data[:favorite_website] = a.favorite_website
-      data[:favorite_podcast] = a.favorite_podcast
-      data[:flatiron_projects] = a.flatiron_projects
-      data[:coding_profiles] = a.coding_profiles
-      data[:personal_projects] = a.personal_projects
-      data[:favorite_cities] = a.favorite_cities
+      data[:favorites_html] = a.favorites
+      data[:coding_profiles_html] = a.coding_profiles
+      data[:personal_projects_html] = a.personal_projects
+      data[:flatiron_projects_html] = a.flatiron_projects
+      data[:favorite_cities_html] = a.favorite_cities
       pic_transform(a, data)
 
       @student_data_array << data
