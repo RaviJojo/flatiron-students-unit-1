@@ -107,10 +107,10 @@
                   <a href="students/<%= student.url %>">
                     <img width="304" height="304" class="prof-image"
                     <% begin %>
-                    <% if student.face_link.start_with?(".") %>
-                    src="./img/<%=student.face_link%>"
+                    <% if student.face_link.start_with?("h") %>
+                    src="<%= student.face_link %>"
                      <% else %>
-                     src = "<%= student.face_link %>"
+                     src = "_site/<%= student.face_link %>"
                      <% end %>
                      class="attachment-blog-thumb wp-post-image" alt="student_name">
                      <% rescue; puts "more bork!"; end %>
