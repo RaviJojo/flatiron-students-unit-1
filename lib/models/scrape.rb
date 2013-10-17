@@ -59,7 +59,7 @@ class ItemScraper
     end
   end
 
-  def biography
+  def bio
     begin
     @doc.css("#ok-text-column-2 .services p").first.content.gsub("\n","")
     rescue
@@ -231,12 +231,12 @@ class IndexScraper
 end
 
 class Scrape
-  attr_accessor :student_data_array
+  attr_accessor :students
 
   def initialize
     url_list = IndexScraper.new(URL)
     @array = url_list.get_student_urls 
-    @student_data_array = []
+    @students = []
   end
 
   def pic_transform(object, data)
@@ -255,34 +255,33 @@ class Scrape
     @array.each do |a_url|
       data = {}
       a = ItemScraper.new(a_url)
-      data[:pic_names] = { face: a.doc.css('img.student_pic').attr('src').text.split("/").last, bg: a.doc.css('style').text.split("background: url(").last.split(")").first.split("/").last } 
-      data[:name] = a.name
-      data[:favorite_comic] = a.favorite_comic
-      data[:twitter] = a.twitter
-      data[:linkedin] = a.linkedin
-      data[:github] = a.github
-      data[:radar] = a.radar
-      data[:quote] = a.quote
-      data[:biography] = a.biography
-      data[:education] = a.education
-      data[:work] = a.work
-      data[:blogs] = a.blogs
-      data[:github_cred] = a.github_cred
-      data[:treehouse_cred] = a.treehouse_cred
-      data[:codeschool_cred] = a.codeschool_cred
-      data[:coderwall_cred] = a.coderwall_cred
-      data[:favorite_website] = a.favorite_website
-      data[:favorite_podcast] = a.favorite_podcast
-      data[:flatiron_projects] = a.flatiron_projects
-      data[:coding_profiles] = a.coding_profiles
-      data[:personal_projects] = a.personal_projects
-      data[:favorite_cities] = a.favorite_cities
-      pic_transform(a, data)
+      s = Student.new
+      s.name = a.name
+      s.favorite_comic = a.favorite_comic
+      s.twitter = a.twitter
+      s.linkedin = a.linkedin
+      s.github = a.github
+      s.radar = a.radar
+      s.quote = a.quote
+      s.bio = a.bio
+      s.education = a.education
+      s.work = a.work
+      s.blogs = a.blogs
+      s.github_cred = a.github_cred
+      s.treehouse_cred = a.treehouse_cred
+      s.codeschool_cred = a.codeschool_cred
+      s.coderwall_cred = a.coderwall_cred
+      s.favorite_website = a.favorite_website
+      s.favorite_podcast = a.favorite_podcast
+      s.flatiron_projects = a.flatiron_projects
+      s.coding_profiles = a.coding_profiles
+      s.personal_projects = a.personal_projects
+      s.favorite_cities = a.favorite_cities
 
-      @student_data_array << data
+      @students << s
     end
 
-    @student_data_array #return of call
+    @students #return of call
   end
 end
 

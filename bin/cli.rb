@@ -15,19 +15,8 @@ end
 require_relative '../environment'
 
 scrape = Scrape.new
-student_hashes = scrape.call
+students = scrape.call
 
-students = student_hashes.collect do |student_hash|
-  s = Student.new
-  s.name = student_hash[:name]
-  s.twitter = student_hash[:twitter]
-  s.linkedin = student_hash[:linkedin]
-  s.github = student_hash[:github]
-  s.blogs = student_hash[:blogs]
-  s.education = student_hash[:education]
-  s.bio = student_hash[:biography]
-  s.save
-end
 
 cli = CLIStudent.new(students)
 cli.call

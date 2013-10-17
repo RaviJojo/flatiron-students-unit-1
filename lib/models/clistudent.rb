@@ -74,7 +74,7 @@ class CLIStudent
         puts "Twitter: #{s.twitter}"
         puts "LinkedIn: #{s.linkedin}"
         puts "GitHub: #{s.github}"
-        puts "Blog: #{s.blog}"
+        puts "Blog: #{s.blogs}"
         puts "Education: #{s.education}"
         puts "Bio: #{s.bio}"
       end
