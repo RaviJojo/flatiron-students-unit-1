@@ -63,17 +63,6 @@ class Student
     end
   end 
 
-  # def self.method_missing(method_name, *args, &block)
-  #   match = method_name.to_s.match(/(find_by_)(.+)/)
-  #   if match[1] == "find_by_"
-  #     column = match[2]
-  #     row = @@db.execute("SELECT * FROM students WHERE #{column} = ? LIMIT 1", args).flatten
-  #     Student.new_with_row(row)
-  #   else
-  #     super
-  #   end
-  # end
-
   def self.table_name
     "#{self.to_s.downcase}s"
   end
@@ -193,7 +182,7 @@ class Student
     Student.find_by_id(id).first
   end
 
-  def self.find_by_name(searchname)     # searches any part of name
+  def self.find_by_name(searchname) # searches any part of name
     Student.all.select {|student| student.name.downcase.include?(searchname.downcase.strip.squeeze(' '))}
   end
  
@@ -209,17 +198,11 @@ class Student
   end
  
   def self.new_with_row(row)
-    # s = Student.new(row[0])
-    # self.attributes_for_db.each_with_index do |attribute, i|
-    #   s.send("#{attribute}=", row[i+1])
-    # end  
-    # s
 
     Student.new(row[0]).tap do |s|
       self.attributes_for_db.each_with_index do |attribute, i|
         s.send("#{attribute}=", row[i+1])
-        # s.send("name=", "Avi")
-        # s.name = "Avi"
+
       end  
     end
   end

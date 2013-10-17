@@ -25,16 +25,5 @@ class SiteGenerator
   end
 
 
-  def create_erb_object(page)
-      # ERB.new(File.open("lib/views/#{page}.erb").read)
-  end
-
-
-  def create_html_file(page)
-      # File.open("_site/#{page}.html", "w+") do |f|
-      #   f << page.result(binding)
-      # end
-  end
-
 end
 

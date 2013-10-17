@@ -1,4 +1,4 @@
-require_relative '../environment'
+require_relative '../config/environment'
 
 scrape = Scrape.new
 students = scrape.call

@@ -1,7 +1,3 @@
-# CLIStudent.new(students). students are a bunch of student instances.
-# The CLIStudent should have a browse (which lists all students), a help, a show
-# (by ID or name), which shows all data of a student, and exit.
-
 class CLIStudent
   attr_reader :students
 
