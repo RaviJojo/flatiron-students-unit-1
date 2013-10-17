@@ -14,7 +14,8 @@ class ItemScraper
 
   def name
     begin
-    @doc.css(".ib_main_header").children.text
+      return "Rosie Hoyem" if @doc.css(".page-title").children.text.include?("Rosie Hoyem")
+      @doc.css(".ib_main_header").children.text.strip
     rescue
       @@apology
     end
@@ -61,7 +62,7 @@ class ItemScraper
     end
   end
 
-  def biography
+  def bio
     begin
     @doc.css("#ok-text-column-2 .services p").first.content.gsub("\n","")
     rescue
@@ -203,6 +204,15 @@ class ItemScraper
   end
     #=> returns array of cities
 
+  def face_link
+    @doc.css('img.student_pic').attr('src').text
+
+  end
+
+  def bg_link
+    @doc.css('style').text.split('background: url(').last.split(')').first
+  end
+
 end
 
 
@@ -220,32 +230,32 @@ class IndexScraper
     url_array
   end
 
-=begin  - Raymond's index page scrape:
-    doc = Nokogiri::HTML(open(self.url))
-    frontpage = doc.css(".home-blog-post")
+  def build_index_hash
+    hash = {}
+    frontpage = self.doc.css(".home-blog-post")
 
-    photo_urls = frontpage.map do |student|
-      student.css(".prof-image").attr("src").to_s
+    frontpage.each do |student|
+      name = student.css(".big-comment").text.strip.split("\n").first
+      photo_url = student.css(".prof-image").attr("src").to_s
+      tagline = student.css(".home-blog-post-meta").text
+      blurb = student.css(".excerpt p").text.squeeze(' ')
+
+      hash[name] = {blurb: blurb, tagline: tagline, index_photo_url: photo_url }
     end
+    hash
 
-    taglines = frontpage.map do |student|
-      student.css(".home-blog-post-meta").text
-    end
 
-    blurbs = frontpage.map do |student|
-      student.css(".excerpt p").text.squeeze(' ')
-    end
-=end
-
+  end
 end
 
+
 class Scrape
-  attr_accessor :student_data_array
+  attr_accessor :students, :index_scraper
 
   def initialize
-    url_list = IndexScraper.new(URL)
-    @array = url_list.get_student_urls 
-    @student_data_array = []
+    @index_scraper = IndexScraper.new(URL)
+    @array = @index_scraper.get_student_urls 
+    @students = []
   end
 
   def pic_transform(object, data)
@@ -258,40 +268,65 @@ class Scrape
     system("cp _site/img/students/#{data[:pic_names][:bg]} _site/img/students/#{object.name.downcase.gsub(/\s|'/, '_')}_background.jpg")
   end
 
+  def page_scrape(a_url)
+      a = ItemScraper.new(a_url)
+      index_hash = @index_scraper.build_index_hash
+      s = Student.new
+      s.name = a.name
+      s.favorite_comic = a.favorite_comic
+      s.twitter = a.twitter
+      s.linkedin = a.linkedin
+      s.github = a.github
+      s.radar = a.radar
+      s.quote = a.quote
+      s.bio = a.bio.strip.squeeze(' ')
+      s.education = a.education
+      s.work = a.work.strip.squeeze(' ')
+      s.blogs = a.blogs
+      s.github_cred = a.github_cred
+      s.treehouse_cred = a.treehouse_cred
+      s.codeschool_cred = a.codeschool_cred
+      s.coderwall_cred = a.coderwall_cred
+      s.favorite_website = a.favorite_website
+      s.favorite_podcast = a.favorite_podcast
+      s.flatiron_projects = a.flatiron_projects
+      s.coding_profiles = a.coding_profiles
+      s.personal_projects = a.personal_projects.strip.squeeze(' ')
+      s.favorite_cities = a.favorite_cities
+      
+      # pic info
+      begin
+      s.index_face_link = index_hash[s.name][:index_photo_url]
+      s.face_link = a.face_link
+      s.bg_link = a.bg_link
+      # index info
+      s.blurb = index_hash[s.name][:blurb]
+      s.tagline = index_hash[s.name][:tagline]
+      rescue
+        binding.pry
+        puts "bork bork bork!"
+        puts s.name
+        s.index_face_link = "http://laughingsquid.com/wp-content/uploads/Tard2.jpg"
+        s.face_link = "http://laughingsquid.com/wp-content/uploads/Tard2.jpg" 
+        s.blurb = "Meow, meow, meow"
+      end
+      # Bana goes by two names, need to compensate
+      # Chris goes by two names (chris, christopher)
+      # saron = student name
+
+      s.save
+      
+      @students << s
+  end
 
   def call
-  
-    @array.each do |a_url|
-      data = {}
-      a = ItemScraper.new(a_url)
-      data[:pic_names] = { face: a.doc.css('img.student_pic').attr('src').text.split("/").last, bg: a.doc.css('style').text.split("background: url(").last.split(")").first.split("/").last } 
-      data[:name] = a.name
-      data[:favorite_comic] = a.favorite_comic
-      data[:twitter] = a.twitter
-      data[:linkedin] = a.linkedin
-      data[:github] = a.github
-      data[:radar] = a.radar
-      data[:quote] = a.quote
-      data[:biography] = a.biography
-      data[:education] = a.education
-      data[:work] = a.work
-      data[:blogs] = a.blogs
-      data[:github_cred] = a.github_cred
-      data[:treehouse_cred] = a.treehouse_cred
-      data[:codeschool_cred] = a.codeschool_cred
-      data[:coderwall_cred] = a.coderwall_cred
-      data[:favorite_website] = a.favorite_website
-      data[:favorite_podcast] = a.favorite_podcast
-      data[:flatiron_projects] = a.flatiron_projects
-      data[:coding_profiles] = a.coding_profiles
-      data[:personal_projects] = a.personal_projects
-      data[:favorite_cities] = a.favorite_cities
-      pic_transform(a, data)
 
-      @student_data_array << data
+    index_scrape = IndexScraper.new(URL)
+    @array.each do |a_url|
+      page_scrape(a_url)    
     end
 
-    @student_data_array #return of call
+    @students #return of call
   end
 end
 

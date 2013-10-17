@@ -1,7 +1,3 @@
-# CLIStudent.new(students). students are a bunch of student instances.
-# The CLIStudent should have a browse (which lists all students), a help, a show
-# (by ID or name), which shows all data of a student, and exit.
-
 class CLIStudent
   attr_reader :students
 
@@ -74,9 +70,18 @@ class CLIStudent
         puts "Twitter: #{s.twitter}"
         puts "LinkedIn: #{s.linkedin}"
         puts "GitHub: #{s.github}"
-        puts "Blog: #{s.blog}"
+        puts "Quote: #{s.quote}"
+        puts "Bio: #{s.bio.strip.squeeze(' ')}"
         puts "Education: #{s.education}"
-        puts "Bio: #{s.bio}"
+        puts "Work: #{s.work.strip.squeeze(' ')}"
+        puts "Blogs: #{s.blogs}"
+        puts "Radar: #{s.radar}"
+        puts "Favorite website: #{s.favorite_website}"
+        puts "Favorite podcast: #{s.favorite_podcast}"
+        puts "Flatiron projects: #{s.flatiron_projects}"
+        puts "Personal_projects: #{s.personal_projects.strip.squeeze(' ')}"
+        puts "Favorite_cities: #{s.favorite_cities}"
+
       end
     end
   end
