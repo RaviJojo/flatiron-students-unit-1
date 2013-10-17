@@ -203,6 +203,15 @@ class ItemScraper
   end
     #=> returns array of cities
 
+  def face_link
+    @doc.css
+  end
+
+  def bg_link
+  
+  end
+
+
 end
 
 
@@ -219,33 +228,23 @@ class IndexScraper
     end
     url_array
   end
-  
+
   def build_index_hash
     hash = {}
     frontpage = self.doc.css(".home-blog-post")
 
-    name = self.doc.map do |student|
-      student.css("big-comment").text.strip
-    end
+    self.doc.each do |student|
+      name = student.css("big-comment").text.strip
+      photo_urls = student.css(".prof-image").attr("src").to_s
+      tagline = student.css(".home-blog-post-meta").text
+      blurb = student.css(".excerpt p").text.squeeze(' ')
 
-    photo_urls = frontpage.map do |student|
-      student.css(".prof-image").attr("src").to_s
+      hash[name] = {blurb: blurb, tagline: tagline}
     end
-
-    taglines = frontpage.map do |student|
-      student.css(".home-blog-post-meta").text
-    end
-
-    blurbs = frontpage.map do |student|
-      student.css(".excerpt p").text.squeeze(' ')
-    end
-
-    hash[:photo_urls] = photo_urls
-    hash[:taglines] = taglines
-    hash[:blurbs] = blurbs
     hash
+
+    { face: a.doc.css('img.student_pic').attr('src').text.split("/").last, bg: a.doc.css('style').text.split("background: url(").last.split(")").first.split("/").last }
   end
-end
 
 class Scrape
   attr_accessor :students, :index_scraper
@@ -266,12 +265,9 @@ class Scrape
     system("cp _site/img/students/#{data[:pic_names][:bg]} _site/img/students/#{object.name.downcase.gsub(/\s|'/, '_')}_background.jpg")
   end
 
-
-
-
   def page_scrape(a_url)
       a = ItemScraper.new(a_url)
-
+      index_hash = self.index_scraper.build_index_hash
       s = Student.new
       s.name = a.name
       s.favorite_comic = a.favorite_comic
@@ -294,11 +290,15 @@ class Scrape
       s.coding_profiles = a.coding_profiles
       s.personal_projects = a.personal_projects
       s.favorite_cities = a.favorite_cities
-      s.blurb = 
-      s.tagline 
-      s.face_link
-      s.bg_link 
-
+      
+      # pic info
+      s.index_face_link = 
+      s.face_link = a.face_link
+      s.bg_link = a.bg_link
+      # index info
+      s.blurb = index_hash[s.name][:blurb]
+      s.tagline = index_hash[s.name][:tagline]
+      
       @students << s
   end
 
