@@ -11,12 +11,15 @@ class CheatItemScraper
   end
 
 
-  def give_raw_html
+  def raw_html
     @doc.to_html
   end  
   
-  def call
-    give_raw_html
+  def name
+    begin
+      @doc.css(".ib_main_header").children.text
+    rescue
+    end
   end
 
 end
@@ -52,7 +55,8 @@ class CheatScrape
     @array.each do |a_url|
       data = {}
       a = CheatItemScraper.new(a_url)
-      data[:html] = a.call
+      data[:html] = a.raw_html
+      data[:name] = a.name
 
       @student_data_array << data
     end
