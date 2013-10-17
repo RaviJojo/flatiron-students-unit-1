@@ -258,11 +258,7 @@ class Scrape
     system("cp _site/img/students/#{data[:pic_names][:bg]} _site/img/students/#{object.name.downcase.gsub(/\s|'/, '_')}_background.jpg")
   end
 
-
-  def call
-  
-    @array.each do |a_url|
-      data = {}
+  def page_scrape(a_url)
       a = ItemScraper.new(a_url)
       s = Student.new
       s.name = a.name
@@ -286,8 +282,20 @@ class Scrape
       s.coding_profiles = a.coding_profiles
       s.personal_projects = a.personal_projects
       s.favorite_cities = a.favorite_cities
+      s.blurb = 
+      s.tagline 
+      s.face_link
+      s.bg_link 
 
       @students << s
+  end
+
+
+  def call
+
+    index_scrape = IndexScraper.new(URL)
+    @array.each do |a_url|
+      page_scrape(a_url)    
     end
 
     @students #return of call
