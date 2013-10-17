@@ -74,7 +74,10 @@ class ItemScraper
   end
 
   def favorite_comic
+    begin
     @doc.css("#ok-text-column-3 .services p").children[13].attr('href')
+    rescue
+    end
   end
 
   def favorite_podcast
@@ -195,6 +198,7 @@ class Scrape
     end
 
     @student_data_array #return of call
+    binding.pry
   end
 end
 
