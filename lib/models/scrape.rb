@@ -306,6 +306,9 @@ class Scrape
         binding.pry
         puts "bork bork bork!"
         puts s.name
+        s.index_face_link = "http://laughingsquid.com/wp-content/uploads/Tard2.jpg"
+        s.face_link = "http://laughingsquid.com/wp-content/uploads/Tard2.jpg" 
+        s.blurb = "Meow, meow, meow"
       end
       # Bana goes by two names, need to compensate
       # Chris goes by two names (chris, christopher)
@@ -315,7 +318,6 @@ class Scrape
       
       @students << s
   end
-
 
   def call
 
