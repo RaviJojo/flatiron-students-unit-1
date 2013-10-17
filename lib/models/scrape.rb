@@ -6,36 +6,48 @@ class ItemScraper
     begin
     @doc = Nokogiri::HTML(open(url))
     rescue
+      "rescued!"
+    end
   end
 
   def name
     begin
     @doc.css(".ib_main_header").children.text
     rescue
+      "rescued!"
+    end
   end
 
   def twitter
     begin
     @doc.css(".social-icons a")[0].attr('href')
     rescue
+      "rescued!"
+    end
   end
 
   def linkedin
     begin
     @doc.css(".social-icons a")[1].attr('href')
     rescue
+      "rescued!"
+    end
   end
 
   def github
     begin
     @doc.css(".social-icons a")[2].attr('href')
     rescue
+      "rescued!"
+    end
   end
 
   def radar
     begin
     @doc.css(".social-icons a")[3].attr('href')
     rescue
+      "rescued!"
+    end
   end
   # this is the "rss"/facebook link.
 
@@ -43,20 +55,27 @@ class ItemScraper
     begin
     @doc.css(".textwidget").text.strip
     rescue
+      "rescued!"
+    end
   end
 
   def biography
     begin
     @doc.css("#ok-text-column-2 .services p").first.content.gsub("\n","")
     rescue
+      "rescued!"
+    end
   end
 
   def education
     begin
     all_education = @doc.css("#ok-text-column-3 .services ul li").collect do |
-        rescueschool|
+        school|
       school.content
     end
+  rescue
+    "rescued!"
+  end
   end
     #=> returns array of school names
 
@@ -64,14 +83,19 @@ class ItemScraper
     begin
     @doc.css("#ok-text-column-4 .services p").children[0].text.gsub("\n","")
     rescue
+      "rescued!"
+    end
   end
 
   def blogs
     begin
     all_blogs = @doc.css("#ok-text-column-3 .services p")[0].css("a").collect do |
-        rescueblog|
+        blog|
       blog.attr('href')
     end
+  rescue
+    "rescued!"
+  end
   end
     #=> returns an array of blog links
 
@@ -79,56 +103,75 @@ class ItemScraper
     begin
     @doc.css(".coder-cred")[0].children.children[1].attr('href')
     rescue
+      "rescued!"
+    end
   end
 
   def treehouse_cred
     begin
     @doc.css(".coder-cred")[0].children.children[4].attr('href')
     rescue
+      "rescued!"
+    end
   end
 
   def codeschool_cred
     begin
     @doc.css(".coder-cred")[0].children.children[7].attr('href')
     rescue
+      "rescued!"
+    end
   end
 
   def coderwall_cred
     begin
     @doc.css(".coder-cred")[0].children.children[10].attr('href')
     rescue
+      "rescued!"
+    end
   end
 
   def favorite_website
     begin
     @doc.css("#ok-text-column-3 .services p").children[10].attr('href')
     rescue
+      "rescued!"
+    end
   end
 
   def favorite_comic
     begin
     @doc.css("#ok-text-column-3 .services p").children[13].attr('href')
     rescue
+      "rescued!"
+    end
   end
 
   def favorite_podcast
     begin
     @doc.css("#ok-text-column-3 .services p").children[16].attr('href')
     rescue
+      "rescued!"
+    end
   end
 
   def flatiron_projects
     begin
     @doc.css("#ok-text-column-4 .services p").children[1].text
     rescue
+      "rescued!"
+    end
   end
 
   def coding_profiles
     begin
     all_links = @doc.css('#ok-text-column-2 .services p')[1].css('a').collect do |
-        rescuelink|
+        link|
       link.attr('href')
     end
+  rescue
+    "rescued!"
+  end
   end
     #=> returns array of site links
 
@@ -136,14 +179,18 @@ class ItemScraper
     begin
     @doc.css('#ok-text-column-4 .services p')[3].content
     rescue
+      "rescued!"
+    end
   end
 
   def favorite_cities
     begin
-    all_cities = @doc.css('#ok-text-column-2 .services p')[2].css("a").collect do 
-      rescue|city|
+    all_cities = @doc.css('#ok-text-column-2 .services p')[2].css("a").collect do |city|
       city.text
     end
+  rescue
+    "rescued!"
+  end
   end
     #=> returns array of cities
 
@@ -210,6 +257,7 @@ class Scrape
       a = ItemScraper.new(a_url)
       data[:pic_names] = { face: a.doc.css('img.student_pic').attr('src').text.split("/").last, bg: a.doc.css('style').text.split("background: url(").last.split(")").first.split("/").last } 
       data[:name] = a.name
+      data[:favorite_comic] = a.favorite_comic
       data[:twitter] = a.twitter
       data[:linkedin] = a.linkedin
       data[:github] = a.github
@@ -229,8 +277,6 @@ class Scrape
       data[:coding_profiles] = a.coding_profiles
       data[:personal_projects] = a.personal_projects
       data[:favorite_cities] = a.favorite_cities
-      data[:favorite_comic] = a.favorite_comic
-      end
       pic_transform(a, data)
 
       @student_data_array << data
