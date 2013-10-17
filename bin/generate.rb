@@ -29,5 +29,5 @@ students = student_hashes.collect do |student_hash|
   s
 end
 
-gen = SiteGenerator.new(students)
-gen.call
+# gen = SiteGenerator.new(students)
+# gen.call

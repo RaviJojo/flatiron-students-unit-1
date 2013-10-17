@@ -148,12 +148,24 @@ class Scrape
     @student_data_array = []
   end
 
+  def pic_transform(object, data)
+    puts "---------------------"
+    puts "the pic info for #{object.name}"
+    puts data[:pic_names][:face]
+    puts data[:pic_names][:bg]
+    puts "----------------------"
+    system("cp _site/img/students/#{data[:pic_names][:face]} _site/img/students/#{object.name.downcase.gsub(' ', '_')}_profile.jpg")
+    system("cp _site/img/students/#{data[:pic_names][:bg]} _site/img/students/#{object.name.downcase.gsub(' ', '_')}_background.jpg")
+  end
+
+
   def call
   
     @array.each do |a_url|
       data = {}
       begin
       a = ItemScraper.new(a_url)
+      data[:pic_names] = { face: a.doc.css('img.student_pic').attr('src').text.split("/").last, bg: a.doc.css('style').text.split("background: url(").last.split(")").first.split("/").last } 
       data[:name] = a.name
       data[:twitter] = a.twitter
       data[:linkedin] = a.linkedin
@@ -177,6 +189,7 @@ class Scrape
       data[:favorite_comic] = a.favorite_comic
       rescue
       end
+      pic_transform(a, data)
 
       @student_data_array << data
     end
