@@ -21,7 +21,12 @@ class Student
     :coding_profiles => "TEXT",
     :personal_projects => "TEXT",
     :favorite_cities => "TEXT",
-    :favorite_comic => "TEXT"
+    :favorite_comic => "TEXT",
+    :index_face_link => "TEXT",
+    :face_link => "TEXT",
+    :bg_link => "TEXT",
+    :blurb => "TEXT",
+    :tagline => "TEXT"
   }
 
   def self.attributes_hash

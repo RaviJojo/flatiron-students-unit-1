@@ -74,9 +74,18 @@ class CLIStudent
         puts "Twitter: #{s.twitter}"
         puts "LinkedIn: #{s.linkedin}"
         puts "GitHub: #{s.github}"
-        puts "Blog: #{s.blogs}"
-        puts "Education: #{s.education}"
+        puts "Quote: #{s.quote}"
         puts "Bio: #{s.bio}"
+        puts "Education: #{s.education}"
+        puts "Work: #{s.work}"
+        puts "Blogs: #{s.blogs}"
+        puts "Radar: #{s.radar}"
+        puts "Favorite website: #{s.favorite_website}"
+        puts "Favorite podcast: #{s.favorite_podcast}"
+        puts "Flatiron projects: #{s.flatiron_projects}"
+        puts "Personal_projects: #{s.personal_projects}"
+        puts "Favorite_cities: #{s.favorite_cities}"
+
       end
     end
   end
