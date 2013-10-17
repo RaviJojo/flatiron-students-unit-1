@@ -80,6 +80,7 @@ class ItemScraper
     #=> returns array of school names
 
   def work
+    # getting truncated/comibing with flatiron projects
     begin
     @doc.css("#ok-text-column-4 .services p").children[0].text.gsub("\n","")
     rescue
@@ -132,6 +133,7 @@ class ItemScraper
   end
 
   def favorite_website
+    # out of order? top getting popped off?
     begin
     @doc.css("#ok-text-column-3 .services p").children[10].attr('href')
     rescue
@@ -140,6 +142,7 @@ class ItemScraper
   end
 
   def favorite_comic
+    # out of order? top getting popped off?
     begin
     @doc.css("#ok-text-column-3 .services p").children[13].attr('href')
     rescue
@@ -148,6 +151,7 @@ class ItemScraper
   end
 
   def favorite_podcast
+    # out of order? top getting popped off?
     begin
     @doc.css("#ok-text-column-3 .services p").children[16].attr('href')
     rescue
@@ -156,6 +160,7 @@ class ItemScraper
   end
 
   def flatiron_projects
+    # combining with Work
     begin
     @doc.css("#ok-text-column-4 .services p").children[1].text
     rescue
@@ -176,6 +181,7 @@ class ItemScraper
     #=> returns array of site links
 
   def personal_projects
+    # blank
     begin
     @doc.css('#ok-text-column-4 .services p')[3].content
     rescue
@@ -184,6 +190,7 @@ class ItemScraper
   end
 
   def favorite_cities
+    # blank
     begin
     all_cities = @doc.css('#ok-text-column-2 .services p')[2].css("a").collect do |city|
       city.text
