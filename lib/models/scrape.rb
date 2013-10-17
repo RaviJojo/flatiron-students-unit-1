@@ -14,7 +14,8 @@ class ItemScraper
 
   def name
     begin
-    @doc.css(".ib_main_header").children.text
+      return "Rosie Hoyem" if @doc.css(".page-title").children.text.include?("Rosie Hoyem")
+      @doc.css(".ib_main_header").children.text
     rescue
       @@apology
     end
