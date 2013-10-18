@@ -303,6 +303,9 @@ class Scrape
         s.bg_link = a.bg_link
         # index info
         s.blurb = index_array[i][:blurb]
+        if s.name == "James Tong"
+          s.blurb = "Meow, meow, meow."
+        end
         s.tagline = index_array[i][:tagline]
       rescue
         binding.pry
