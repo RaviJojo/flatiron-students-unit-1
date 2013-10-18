@@ -243,7 +243,6 @@ class IndexScraper
 
       h = {name: name, blurb: blurb, tagline: tagline, index_photo_url: photo_url }
     end
-    #binding.pry
   end
 end
 
@@ -296,7 +295,11 @@ class Scrape
       # pic info
       begin
         s.index_face_link = index_array[i][:index_photo_url]
-        s.face_link = a.face_link
+        if a.face_link == "../img/students/student_name_profile.jpg"
+          s.face_link = "http://laughingsquid.com/wp-content/uploads/Tard2.jpg"
+        else
+          s.face_link = a.face_link
+        end
         s.bg_link = a.bg_link
         # index info
         s.blurb = index_array[i][:blurb]
@@ -326,6 +329,8 @@ class Scrape
     end
 
     @students #return of call
+    
   end
 end
+
 
