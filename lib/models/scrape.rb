@@ -230,21 +230,20 @@ class IndexScraper
     url_array
   end
 
-  def build_index_hash
-    hash = {}
+  def build_index_array(a)
     frontpage = self.doc.css(".home-blog-post")
-
-    frontpage.each do |student|
+    sarray = frontpage.collect do |student|
       name = student.css(".big-comment").text.strip.split("\n").first
       photo_url = student.css(".prof-image").attr("src").to_s
+      if photo_url == "img/students/student_name_index_profile.jpg"
+        photo_url = a.face_link
+      end
       tagline = student.css(".home-blog-post-meta").text
       blurb = student.css(".excerpt p").text.squeeze(' ')
 
-      hash[name] = {blurb: blurb, tagline: tagline, index_photo_url: photo_url }
+      h = {name: name, blurb: blurb, tagline: tagline, index_photo_url: photo_url }
     end
-    hash
-
-
+    #binding.pry
   end
 end
 
@@ -268,9 +267,9 @@ class Scrape
     system("cp _site/img/students/#{data[:pic_names][:bg]} _site/img/students/#{object.name.downcase.gsub(/\s|'/, '_')}_background.jpg")
   end
 
-  def page_scrape(a_url)
+  def page_scrape(a_url, i)
       a = ItemScraper.new(a_url)
-      index_hash = @index_scraper.build_index_hash
+      index_array = @index_scraper.build_index_array(a)
       s = Student.new
       s.name = a.name
       s.favorite_comic = a.favorite_comic
@@ -296,12 +295,12 @@ class Scrape
       
       # pic info
       begin
-      s.index_face_link = index_hash[s.name][:index_photo_url]
-      s.face_link = a.face_link
-      s.bg_link = a.bg_link
-      # index info
-      s.blurb = index_hash[s.name][:blurb]
-      s.tagline = index_hash[s.name][:tagline]
+        s.index_face_link = index_array[i][:index_photo_url]
+        s.face_link = a.face_link
+        s.bg_link = a.bg_link
+        # index info
+        s.blurb = index_array[i][:blurb]
+        s.tagline = index_array[i][:tagline]
       rescue
         binding.pry
         puts "bork bork bork!"
@@ -322,8 +321,8 @@ class Scrape
   def call
 
     index_scrape = IndexScraper.new(URL)
-    @array.each do |a_url|
-      page_scrape(a_url)    
+    @array.each_with_index do |a_url, i|
+      page_scrape(a_url, i)    
     end
 
     @students #return of call
